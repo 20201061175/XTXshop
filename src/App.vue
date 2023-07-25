@@ -4,8 +4,13 @@
 
 <template>
   <RouterView />
+  <div class="test">
+    aaaa
+  </div>
 </template>
 
-<style scoped>
-
+<style scoped lang="scss">
+.test{
+  color: $priceColor;
+}
 </style>

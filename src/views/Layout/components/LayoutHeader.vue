@@ -1,6 +1,5 @@
 <script setup>
-import LayoutHeaderUl from './LayoutHeaderUl.vue'
-import HeaderCart from './HeaderCart.vue'
+
 </script>
 
 <template>
@@ -9,16 +8,22 @@ import HeaderCart from './HeaderCart.vue'
       <h1 class="logo">
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
-
-      <LayoutHeaderUl />
+      <ul class="app-header-nav">
+        <li class="home">
+          <RouterLink to="/">首页</RouterLink>
+        </li>
+        <li> <RouterLink to="/">居家</RouterLink> </li>
+        <li> <RouterLink to="/">美食</RouterLink> </li>
+        <li> <RouterLink to="/">服饰</RouterLink> </li>
+      </ul>
       <div class="search">
         <i class="iconfont icon-search"></i>
         <input type="text" placeholder="搜一搜">
       </div>
       <!-- 头部购物车 -->
-      <HeaderCart />
+      
     </div>
-</header>
+  </header>
 </template>
 
 
@@ -43,6 +48,36 @@ import HeaderCart from './HeaderCart.vue'
     }
   }
 
+  .app-header-nav {
+    width: 820px;
+    display: flex;
+    padding-left: 40px;
+    position: relative;
+    z-index: 998;
+  
+    li {
+      margin-right: 40px;
+      width: 38px;
+      text-align: center;
+  
+      a {
+        font-size: 16px;
+        line-height: 32px;
+        height: 32px;
+        display: inline-block;
+  
+        &:hover {
+          color: $xtxColor;
+          border-bottom: 1px solid $xtxColor;
+        }
+      }
+  
+      .active {
+        color: $xtxColor;
+        border-bottom: 1px solid $xtxColor;
+      }
+    }
+  }
 
   .search {
     width: 170px;

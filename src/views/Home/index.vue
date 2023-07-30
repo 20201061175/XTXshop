@@ -15,10 +15,4 @@ import homePanel from './components/homePanel.vue'
   <HomeNew />
   <HomeHot />
   <homeProduct />
-  
-  <homePanel title="人气推荐" subTitle="人气推荐，好多商品">
-    <div>
-      我是人气推荐的插槽
-    </div>
-  </homePanel>
 </template>

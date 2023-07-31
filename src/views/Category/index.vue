@@ -1,26 +1,14 @@
 <script setup lang="ts">
-import { getCategoryAPI } from '../../apis/category'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { getBannerAPI } from '../../apis/home'
+
+import GoodsItem from '../Home/components/GoodsItem.vue'
+import { useBanner } from './components/useBanner.ts'
+import { useCategory } from './components/useCategory.ts'
 
 // 获取面包屑导航
-const categoryData = ref({})
-const route = useRoute()
-const getCategory = async (id) => {
-  // 如何在setup中获取路由参数 useRoute() -> route 等价于this.$route
-  const res = await getCategoryAPI(id)
-  categoryData.value = res.result
-}
-onMounted(() => getCategory(route.params.id))
+const { categoryData } = useCategory()
 
 // 获取轮播图
-const bannerList = ref([])
-const getBanner = async () => {
-  const res = await getBannerAPI({ distributionSite: 2 })
-  bannerList.value = res.result
-}
-onMounted(() => getBanner())
+const { bannerList } = useBanner()
 
 </script>
 
@@ -42,6 +30,26 @@ onMounted(() => getBanner())
           </el-carousel-item>
         </el-carousel>
       </div>
+      <!-- -->
+      <div class="sub-list">
+        <h3>全部分类</h3>
+        <ul>
+          <li v-for="i in categoryData.children" :key="i.id">
+            <RouterLink to="/">
+              <img :src="i.picture" />
+              <p>{{ i.name }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+        <div class="head">
+          <h3>- {{ item.name }}-</h3>
+        </div>
+        <div class="body">
+          <GoodsItem v-for="good in item.goods" :goods="good" :key="good.id" />
+        </div>
+      </div>
 
     </div>
   </div>
@@ -60,6 +68,7 @@ onMounted(() => getBanner())
     height: 500px;
   }
 }
+
 .top-category {
   h3 {
     font-size: 28px;

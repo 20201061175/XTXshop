@@ -30,7 +30,13 @@ const router = createRouter({
       path: '/login',
       component: Login,
     },
-  ]
+  ],
+  // 路由切换时滑动到顶部
+  scrollBehavior() {
+    return {
+      top: 0
+    }
+  }
 })
 
 export default router

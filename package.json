@@ -31,5 +31,8 @@
     "vue-template-compiler": "^2.7.14",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
+  },
+  "rules": {
+    "@typescript-eslint/no-explicit-any": ["off"]
   }
 }

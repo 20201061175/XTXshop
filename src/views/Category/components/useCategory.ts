@@ -12,8 +12,8 @@ export const useCategory = () => {
     categoryData.value = res.result
   }
   onMounted(() => getCategory())
+  // 路由缓存，url不变参数更新了也不会刷新组件，强制赋值。
   onBeforeRouteUpdate((to) => {
-    console.log(to)
     getCategory(to.params.id)
   })
   return {

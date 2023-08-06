@@ -1,9 +1,14 @@
 <script setup lang="ts">
 // 表单校验
 import { ref } from 'vue'
+import { loginAPI } from '../../apis/users'
+import 'element-plus/theme-chalk/el-message.css'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+
 const form = ref({
-  account: '',
-  password: '',
+  account: 'heima290',
+  password: 'hm#qd@23!',
   agree: true,
 })
 const rules = ref({
@@ -27,10 +32,17 @@ const rules = ref({
   ]
 })
 const formRef = ref(null)
+const router = useRouter()
 const doLogin = () => {
-  formRef.value.validate((valid) => {
+  formRef.value.validate(async (valid) => {
+    const { account, password } = form.value
     // 都通过校验 valid为true
-    if (valid) console.log("yes")
+    if (valid) {
+      const res = await loginAPI({ account, password })
+      console.log(res)
+      ElMessage({ type: 'success', message: '登录成功' })
+      router.replace({ path: '/' })
+    }
   })
 }
 </script>

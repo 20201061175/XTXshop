@@ -4,9 +4,6 @@
 
 <template>
   <RouterView />
-  <div class="test">
-    aaaa
-  </div>
 </template>
 
 <style scoped lang="scss">

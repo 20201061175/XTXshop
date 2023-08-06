@@ -2,18 +2,52 @@
 import DetailHot from './components/DetailHot.vue'
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import {getDetail} from '../../apis/details'
+import { getDetail } from '../../apis/details'
+import { ElMessage } from 'element-plus';
+import { useCartStore } from '../../stores/cartStore';
 
 const goods = ref({})
 const route = useRoute()
+const cartStore = useCartStore()
+
 const getGoods = async () => {
   const res = await getDetail(route.params.id)
   goods.value = res.result
 }
 onMounted(() => getGoods())
+
+let skuObj = {}
 const skuChange = (sku) => {
   console.log(sku)
+  skuObj = sku
 }
+
+const count = ref(1)
+const countChange = () => {
+
+}
+
+const addCart = () => {
+  if (skuObj.skuId) {
+    // 已选中规格
+    cartStore.addCart({
+      id: goods.value.id,
+      name: goods.value.name,
+      picture: goods.value.mainPictures[0],
+      price: goods.value.price,
+      count: count.value,
+      skuId: skuObj.skuId,
+      attrsText: skuObj.specsText,
+      selected: true,
+    })
+    
+  } else {
+    // 规格没有选择
+    ElMessage.warning('请选择规格')
+  }
+}
+
+
 </script>
 
 <template>
@@ -22,8 +56,10 @@ const skuChange = (sku) => {
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/${goods?.categories?.[1].id}` }">{{ goods?.categories?.[1].name }}</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/sub/${goods?.categories?.[0].id}` }">{{ goods?.categories?.[0].name }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: `/category/${goods?.categories?.[1].id}` }">{{ goods?.categories?.[1].name
+          }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: `/category/sub/${goods?.categories?.[0].id}` }">{{ goods?.categories?.[0].name
+          }}</el-breadcrumb-item>
           <el-breadcrumb-item>抓绒保暖，毛毛虫子儿童运动鞋</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -33,7 +69,7 @@ const skuChange = (sku) => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <XtxImageView :image-list="goods.mainPictures"/>
+              <XtxImageView :image-list="goods.mainPictures" />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
@@ -82,12 +118,12 @@ const skuChange = (sku) => {
                 </dl>
               </div>
               <!-- sku组件 -->
-              <XtxSku :goods="goods" @change="skuChange"/>
+              <XtxSku :goods="goods" @change="skuChange" />
               <!-- 数据组件 -->
-
+              <el-input-number v-model="count" @change="countChange" />
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn">
+                <el-button size="large" class="btn" @click="addCart">
                   加入购物车
                 </el-button>
               </div>
@@ -110,16 +146,16 @@ const skuChange = (sku) => {
                     </li>
                   </ul>
                   <!-- 图片 -->
-                  <img v-for="img in goods?.details?.pictures" :src="img" :key="img" alt=""/>
+                  <img v-for="img in goods?.details?.pictures" :src="img" :key="img" alt="" />
                 </div>
               </div>
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
               <!-- 24小时 -->
-              <DetailHot :hot-type="1"/>
+              <DetailHot :hot-type="1" />
               <!-- 周 -->
-              <DetailHot :hot-type="2"/>
+              <DetailHot :hot-type="2" />
             </div>
           </div>
         </div>

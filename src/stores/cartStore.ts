@@ -1,17 +1,30 @@
 //购物车
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
+import { useUserStore } from './user'
+import { insertCartAPI, findNewCartListAPI } from '../apis/cart'
 
 export const useCartStore = defineStore('cart',
   () => {
+    const userStore = useUserStore()
+    const isLogin = computed(() => userStore.userInfo.token)
+
     const cartList = ref([])
 
-    const addCart = (goods) => {
-      const item = cartList.value.find(item => item.skuId === goods.skuId)
-      if (item) {
-        item.count++
+    const addCart = async (goods) => {
+      const { skuId, count } = goods
+      if (isLogin.value) {
+        // 登录之后线上添加商品
+        await insertCartAPI({ skuId, count })
+        const res = await findNewCartListAPI()
+        cartList.value = res.result
       } else {
-        cartList.value.push(goods)
+        const item = cartList.value.find(item => item.skuId === goods.skuId)
+        if (item) {
+          item.count++
+        } else {
+          cartList.value.push(goods)
+        }
       }
     }
 
@@ -25,7 +38,7 @@ export const useCartStore = defineStore('cart',
       const item = cartList.value.find(item => item.skuId === skuId)
       item.selected = selected
     }
-    
+
     const selectAll = (selected) => {
       cartList.value.forEach(item => item.selected = selected)
     }

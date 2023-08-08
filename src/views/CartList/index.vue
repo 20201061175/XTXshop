@@ -1,9 +1,16 @@
 <script setup>
 import { useCartStore } from '../../stores/cartStore'
+import router from '../../router/index.js'
 const cartStore = useCartStore()
 
 const singleCheck = (i, selected) => {
   cartStore.singleCheck(i.skuId, selected)
+}
+
+const loadPay = () => {
+  router.push({
+    path: '/checkout'
+  })
 }
 </script>
 
@@ -80,7 +87,7 @@ const singleCheck = (i, selected) => {
           <span class="red">¥ {{ cartStore.selectedPrice.toFixed(2) }} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary" >下单结算</el-button>
+          <el-button size="large" type="primary" @click="loadPay">下单结算</el-button>
         </div>
       </div>
     </div>

@@ -35,7 +35,7 @@ const showDialog = ref(false)
               </ul>
             </div>
             <div class="action">
-              <el-button size="large" @click="toggleFlag = true">切换地址</el-button>
+              <el-button size="large" @click="showDialog = true">切换地址</el-button>
               <el-button size="large" @click="addFlag = true">添加地址</el-button>
             </div>
           </div>

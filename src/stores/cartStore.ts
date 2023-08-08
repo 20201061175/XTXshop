@@ -11,13 +11,18 @@ export const useCartStore = defineStore('cart',
 
     const cartList = ref([])
 
+    const updateNewList = async () => {
+      const res = await findNewCartListAPI()
+      cartList.value = res.result
+    }
+
     const addCart = async (goods) => {
       const { skuId, count } = goods
       if (isLogin.value) {
         // 登录之后线上添加商品
         await insertCartAPI({ skuId, count })
-        const res = await findNewCartListAPI()
-        cartList.value = res.result
+        updateNewList()
+
       } else {
         const item = cartList.value.find(item => item.skuId === goods.skuId)
         if (item) {
@@ -31,8 +36,7 @@ export const useCartStore = defineStore('cart',
     const delCart = async (skuId) => {
       if (isLogin.value) {
         await delCartAPI([skuId])
-        const res = await findNewCartListAPI()
-        cartList.value = res.result
+        updateNewList()
       } else {
         const idx = cartList.value.findIndex(item => skuId === item.skuId)
         cartList.value.splice(idx, 1)
@@ -72,6 +76,7 @@ export const useCartStore = defineStore('cart',
       singleCheck,
       selectAll,
       clearCart,
+      updateNewList,
     }
   },
   {
